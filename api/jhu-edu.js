@@ -16,9 +16,9 @@ const column = {
   RECOVERED: 'recovered'
 }
 
-let sheet
-
 router.get('/latest', function (req, res) {
+  let sheet
+
   async.series(
     [
       function setAuth(step) {
@@ -41,6 +41,50 @@ router.get('/latest', function (req, res) {
         }, function( err, rows ){
           console.log('Read '+rows.length+' rows')
           res.status(200).send(JSON.stringify(rows, replacer))
+          step()
+        })
+      },
+    ], function(err){
+        if( err ) {
+          console.log('Error: '+err)
+        }
+    })
+})
+
+router.get('/total', function (req, res) {
+  let sheet
+
+  async.series(
+    [
+      function setAuth(step) {
+        doc.useServiceAccountAuth(creds, step)
+      },
+      function getInfoAndWorksheets(step) {
+        doc.getInfo(function(err, info) {
+          sheet = info.worksheets[0]
+          step()
+        })
+      },
+      function workingWithRows(step) {
+        // google provides some query options
+        sheet.getRows({
+          offset: 1,
+          limit: 1000,
+          orderby: 'col2'
+        }, function(err, rows) {
+          const total = {
+            [column.CONFIRMED]: 0,
+            [column.DEATHS]: 0,
+            [column.RECOVERED]: 0
+          }
+
+          for (const row of rows) {
+            total[column.CONFIRMED] += Number(row[column.CONFIRMED])
+            total[column.DEATHS] += Number(row[column.DEATHS])
+            total[column.RECOVERED] += Number(row[column.RECOVERED])
+          }
+
+          res.status(200).json(total)
           step()
         })
       },
