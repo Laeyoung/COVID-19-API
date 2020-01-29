@@ -51,7 +51,7 @@ router.get('/latest', function (req, res) {
     })
 })
 
-router.get('/total', function (req, res) {
+router.get('/brief', function (req, res) {
   let sheet
 
   async.series(
