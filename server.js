@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const port = 8080
 
 var GoogleSpreadsheet = require('google-spreadsheet');
@@ -9,7 +11,8 @@ var async = require('async');
 var doc = new GoogleSpreadsheet('1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w');
 var sheet;
 
-async.series([
+async.series(
+  [
     function setAuth(step) {
       // see notes below for authentication instructions!
       var creds = require('./google-generated-creds.json');
@@ -18,8 +21,6 @@ async.series([
     },
     function getInfoAndWorksheets(step) {
       doc.getInfo(function(err, info) {
-        console.log('' + err)
-
         console.log('Loaded doc: '+info.title+' by '+info.author.email);
         sheet = info.worksheets[0];
         console.log('sheet 1: '+sheet.title+' '+sheet.rowCount+'x'+sheet.colCount);
@@ -73,31 +74,14 @@ async.series([
         step();
       });
     },
-    function managingSheets(step) {
-      doc.addWorksheet({
-        title: 'my new sheet'
-      }, function(err, sheet) {
-   
-        // change a sheet's title
-        sheet.setTitle('new title'); //async
-   
-        //resize a sheet
-        sheet.resize({rowCount: 50, colCount: 20}); //async
-   
-        sheet.setHeaderRow(['name', 'age', 'phone']); //async
-   
-        // removing a worksheet
-        sheet.del(); //async
-   
-        step();
-      });
-    }
   ], function(err){
       if( err ) {
         console.log('Error: '+err);
       }
-  });
+  })
 
+const jhuEdu = require('./api/jhu-edu')
+app.use('/jhu-edu', jhuEdu)
 
 app.get('/', (req, res) => res.send('Hello!'))
 
