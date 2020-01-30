@@ -29,6 +29,9 @@ Content-Type: application/json
 curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/brief" -H "accept: application/json"
 ```
 
+**Browser:**
+https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/brief
+
 ### Latest
 
 **Request:**
@@ -62,6 +65,9 @@ Content-Type: application/json
 ```sh
 curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/latest" -H "accept: application/json"
 ```
+
+**Browser:**
+https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/latest
 
 ## Try it
 [![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=github.com/Laeyoung/Wuhan-Coronavirus-API)
