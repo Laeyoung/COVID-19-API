@@ -1,0 +1,53 @@
+openapi: 3.0.0
+
+info:
+  title: API Service for tracking the Wuhan Coronavirus
+  description: 'This repository provides API Service for tracking the Wuhan Coronavirus using Novel Coronavirus (2019-nCoV) Cases[link](https://docs.google.com/spreadsheets/u/1/d/1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w/htmlview), provided by [JHU CSSE](https://systems.jhu.edu/).'
+  contact:
+    email: gadise@gmail.com
+  license:
+    name: MIT
+  version: 0.1.0
+
+servers:
+  - url: https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/
+
+tags:
+- name: Johns Hopkins CSSE
+  description: Data source from Johns Hopkins CSSE
+
+paths:
+  /jhu-edu/brief:
+    get:
+      tags:
+      - Johns Hopkins CSSE
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                properties:
+                  result:
+                    type: string
+        '400':
+          description: Bad Request Error
+        default:
+          description: Unexpected Error
+  /jhu-edu/latest:
+    get:
+      tags:
+      - Johns Hopkins CSSE
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                properties:
+                  result:
+                    type: string
+        '400':
+          description: Bad Request Error
+        default:
+          description: Unexpected Error
