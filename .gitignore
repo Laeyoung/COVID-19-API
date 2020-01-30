@@ -102,3 +102,4 @@ dist
 
 # TernJS port file
 .tern-port
+google-generated-creds.json
