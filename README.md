@@ -12,6 +12,17 @@ https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api
 ```json
 GET /jhu-edu/brief
 ```
+**Successful Response:**
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+	"confirmed": 7783,
+	"deaths": 170,
+	"recovered": 133
+}
+```
 
 **Curl:**
 ```sh
@@ -23,6 +34,28 @@ curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/b
 **Request:**
 ```json
 GET /jhu-edu/latest
+```
+**Successful Response:**
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[{
+	"provincestate": "Hubei",
+	"countryregion": "Mainland China",
+	"lastupdate": "1/29/2020 21:00",
+	"confirmed": "4586",
+	"deaths": "162",
+	"recovered": "90"
+}, {
+	"provincestate": "Zhejiang",
+	"countryregion": "Mainland China",
+	"lastupdate": "1/29/2020 21:00",
+	"confirmed": "428",
+	"deaths": "",
+	"recovered": "4"
+}, ...
+]
 ```
 
 **Curl:**
