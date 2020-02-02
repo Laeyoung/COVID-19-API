@@ -167,7 +167,7 @@
     "iso2": "CN",
     "admin_name": "Guangdong"
   },
-  "Chicago": {
+  "Chicago, IL": {
     "lat": 41.8373,
     "lng": -87.6862,
     "country": "United States",
@@ -426,7 +426,7 @@
     "iso2": "IN",
     "admin_name": "Mahārāshtra"
   },
-  "Boston": {
+  "Boston, MA": {
     "lat": 42.6528,
     "lng": -78.7555,
     "country": "United States",
@@ -608,7 +608,7 @@
     "iso2": "BR",
     "admin_name": "Pernambuco"
   },
-  "Seattle": {
+  "Seattle, WA": {
     "lat": 47.6211,
     "lng": -122.3244,
     "country": "United States",
@@ -15217,7 +15217,7 @@
     "iso2": "SO",
     "admin_name": "Jubbada Hoose"
   },
-  "Tempe": {
+  "Tempe, AZ": {
     "lat": 33.3881,
     "lng": -111.9318,
     "country": "United States",
@@ -19732,7 +19732,7 @@
     "iso2": "KZ",
     "admin_name": "Qostanay"
   },
-  "East Los Angeles": {
+  "Los Angeles, CA": {
     "lat": 34.0326,
     "lng": -118.1691,
     "country": "United States",
@@ -33872,6 +33872,20 @@
     "iso2": "MX",
     "admin_name": "Durango"
   },
+  "Orange, CA": {
+    "lat": 33.807757,
+    "lng": -117.887293,
+    "country": "United States",
+    "iso2": "US",
+    "admin_name": "California"
+  },
+  "Santa Clara, CA": {
+    "lat": 37.37110,
+    "lng": -122.037572,
+    "country": "United States",
+    "iso2": "US",
+    "admin_name": "California"
+  },  
   "Orange Cove": {
     "lat": 36.6211,
     "lng": -119.3188,

@@ -69,7 +69,7 @@
     "lng": 3.5666,
     "iso2": "FR"
   },
-  "Korea, South": {
+  "South Korea": {
     "lat": 36.9353,
     "lng": 127.6897,
     "iso2": "KR"
@@ -84,7 +84,7 @@
     "lng": 108.2,
     "iso2": "ID"
   },
-  "United Kingdom": {
+  "UK": {
     "lat": 58.4333,
     "lng": -3.0834,
     "iso2": "GB"
@@ -204,7 +204,7 @@
     "lng": 16.1,
     "iso2": "IT"
   },
-  "Korea, North": {
+  "North Korea": {
     "lat": 40.6171,
     "lng": 125.4501,
     "iso2": "KP"
