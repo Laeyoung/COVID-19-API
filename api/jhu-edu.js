@@ -21,10 +21,6 @@ const countries = require('../dataset/countries.json')
 const states = require('../dataset/states.json')
 const cities = require('../dataset/cities.json')
 
-console.log(Object.keys(countries).length)
-console.log(Object.keys(states).length)
-console.log(Object.keys(cities).length)
-
 router.get('/latest', function (req, res) {
   let sheet
 
