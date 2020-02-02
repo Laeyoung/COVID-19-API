@@ -136,6 +136,13 @@ function addLocation(item) {
       lat: country.lat,
       lng: country.lng
     }
+  } else if (item.provincestate && cities[item.provincestate]) { // Added for US case.
+    const city = cities[item.provincestate]
+
+    item.location = {
+      lat: city.lat,
+      lng: city.lng
+    }
   }
 
   return item
