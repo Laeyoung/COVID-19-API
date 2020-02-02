@@ -16,6 +16,15 @@ const column = {
   RECOVERED: 'recovered'
 }
 
+// World cities dataset from https://simplemaps.com/data/world-cities
+const countries = require('../dataset/countries.json')
+const states = require('../dataset/states.json')
+const cities = require('../dataset/cities.json')
+
+console.log(Object.keys(countries).length)
+console.log(Object.keys(states).length)
+console.log(Object.keys(cities).length)
+
 router.get('/latest', function (req, res) {
   let sheet
 
@@ -40,7 +49,13 @@ router.get('/latest', function (req, res) {
           orderby: 'col2'
         }, function( err, rows ){
           console.log('Read '+rows.length+' rows')
-          res.status(200).send(JSON.stringify(rows, replacer))
+
+          res.status(200).send(
+            JSON.stringify(
+              rows.map(row => addLocation(row)),
+              replacer
+            )
+          )
           step()
         })
       },
@@ -104,6 +119,26 @@ function replacer(key, value) {
     default:
       return value
   }
+}
+
+function addLocation(item) {
+  if (item.provincestate && states[item.provincestate]) {
+    const state = states[item.provincestate]
+
+    item.location = {
+      lat: state.lat,
+      lng: state.lng
+    }
+  } else if (item.countryregion && countries[item.countryregion]) { 
+    const country = countries[item.countryregion]
+
+    item.location = {
+      lat: country.lat,
+      lng: country.lng
+    }
+  }
+
+  return item
 }
 
 module.exports = router
