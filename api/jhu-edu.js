@@ -3,9 +3,9 @@ const router = express.Router()
 
 const GoogleSpreadsheet = require('google-spreadsheet')
 const async = require('async')
- 
+
 // spreadsheet key is the long id in the sheets URL
-const doc = new GoogleSpreadsheet('1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w')
+const doc = new GoogleSpreadsheet('1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM')
 const creds = require('../google-generated-creds.json')
 const column = {
   PROVINCE_STATE: 'provincestate',
@@ -15,6 +15,11 @@ const column = {
   DEATHS: 'deaths',
   RECOVERED: 'recovered'
 }
+
+// World cities dataset from https://simplemaps.com/data/world-cities
+const countries = require('../dataset/countries.json')
+const states = require('../dataset/states.json')
+const cities = require('../dataset/cities.json')
 
 router.get('/latest', function (req, res) {
   let sheet
@@ -40,7 +45,13 @@ router.get('/latest', function (req, res) {
           orderby: 'col2'
         }, function( err, rows ){
           console.log('Read '+rows.length+' rows')
-          res.status(200).send(JSON.stringify(rows, replacer))
+
+          res.status(200).send(
+            JSON.stringify(
+              rows.map(row => addLocation(row)),
+              replacer
+            )
+          )
           step()
         })
       },
@@ -56,9 +67,6 @@ router.get('/brief', function (req, res) {
 
   async.series(
     [
-      function setAuth(step) {
-        doc.useServiceAccountAuth(creds, step)
-      },
       function getInfoAndWorksheets(step) {
         doc.getInfo(function(err, info) {
           sheet = info.worksheets[0]
@@ -104,6 +112,33 @@ function replacer(key, value) {
     default:
       return value
   }
+}
+
+function addLocation(item) {
+  if (item.provincestate && states[item.provincestate]) {
+    const state = states[item.provincestate]
+
+    item.location = {
+      lat: state.lat,
+      lng: state.lng
+    }
+  } else if (item.countryregion && countries[item.countryregion]) { 
+    const country = countries[item.countryregion]
+
+    item.location = {
+      lat: country.lat,
+      lng: country.lng
+    }
+  } else if (item.provincestate && cities[item.provincestate]) { // Added for US case.
+    const city = cities[item.provincestate]
+
+    item.location = {
+      lat: city.lat,
+      lng: city.lng
+    }
+  }
+
+  return item
 }
 
 module.exports = router
