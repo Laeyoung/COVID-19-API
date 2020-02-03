@@ -3,10 +3,10 @@ const router = express.Router()
 
 const GoogleSpreadsheet = require('google-spreadsheet')
 const async = require('async')
- 
+
 // spreadsheet key is the long id in the sheets URL
-const doc = new GoogleSpreadsheet('1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w')
-const creds = require('../google-generated-creds.json')
+const doc = new GoogleSpreadsheet('101aLdH20OgxsPcorRYo86k2_-IX4ymAEwbBm2Cx7VRk')
+//const creds = require('../google-generated-creds.json')
 const column = {
   PROVINCE_STATE: 'provincestate',
   COUNTRY_REGION: 'countryregion',
@@ -26,9 +26,6 @@ router.get('/latest', function (req, res) {
 
   async.series(
     [
-      function setAuth(step) {
-        doc.useServiceAccountAuth(creds, step)
-      },
       function getInfoAndWorksheets(step) {
         doc.getInfo(function(err, info) {
           console.log('Loaded doc: '+info.title+' by '+info.author.email)
@@ -67,9 +64,6 @@ router.get('/brief', function (req, res) {
 
   async.series(
     [
-      function setAuth(step) {
-        doc.useServiceAccountAuth(creds, step)
-      },
       function getInfoAndWorksheets(step) {
         doc.getInfo(function(err, info) {
           sheet = info.worksheets[0]
