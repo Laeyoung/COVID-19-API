@@ -5,7 +5,7 @@ const GoogleSpreadsheet = require('google-spreadsheet')
 const async = require('async')
  
 // spreadsheet key is the long id in the sheets URL
-const doc = new GoogleSpreadsheet('1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w')
+const doc = new GoogleSpreadsheet('1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM')
 const creds = require('../google-generated-creds.json')
 const column = {
   PROVINCE_STATE: 'provincestate',
