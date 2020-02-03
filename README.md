@@ -49,17 +49,25 @@ Content-Type: application/json
 [{
 	"provincestate": "Hubei",
 	"countryregion": "Mainland China",
-	"lastupdate": "1/29/2020 21:00",
-	"confirmed": "4586",
-	"deaths": "162",
-	"recovered": "90"
+	"lastupdate": "2/2/2020 23:43",
+	"confirmed": "11177",
+	"deaths": "350",
+	"recovered": "295",
+	"location": {
+		"lat": 32.52,
+		"lng": 111.5
+	}
 }, {
 	"provincestate": "Zhejiang",
 	"countryregion": "Mainland China",
-	"lastupdate": "1/29/2020 21:00",
-	"confirmed": "428",
-	"deaths": "",
-	"recovered": "4"
+	"lastupdate": "2/3/2020 1:33",
+	"confirmed": "724",
+	"deaths": "0",
+	"recovered": "36",
+	"location": {
+		"lat": 28.4504,
+		"lng": 119.9
+	}
 }, ...
 ]
 ```
@@ -73,4 +81,4 @@ curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/l
 https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/latest
 
 ### Original data source
-[Novel Coronavirus (2019-nCoV) Cases](https://docs.google.com/spreadsheets/d/1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w), provided by JHU CSSE
+[Novel Coronavirus (2019-nCoV) Cases](https://docs.google.com/spreadsheets/d/1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM), provided by JHU CSSE
