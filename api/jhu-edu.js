@@ -30,7 +30,9 @@ router.get('/latest', function (req, res) {
         doc.useServiceAccountAuth(creds, step)
       },
       function getInfoAndWorksheets(step) {
-        doc.getInfo(function(err, info) {
+        doc.getInfo(function (err, info) {
+          if (err) return res.status(400).send(err)
+
           console.log('Loaded doc: '+info.title+' by '+info.author.email)
           sheet = info.worksheets[0]
           console.log('sheet 1: '+sheet.title+' '+sheet.rowCount+'x'+sheet.colCount)
@@ -55,7 +57,7 @@ router.get('/latest', function (req, res) {
           step()
         })
       },
-    ], function(err){
+    ], function (err) {
         if( err ) {
           console.log('Error: '+err)
         }
@@ -67,8 +69,13 @@ router.get('/brief', function (req, res) {
 
   async.series(
     [
+      function setAuth(step) {
+        doc.useServiceAccountAuth(creds, step)
+      },
       function getInfoAndWorksheets(step) {
-        doc.getInfo(function(err, info) {
+        doc.getInfo(function (err, info) {
+          if (err) return res.status(400).send(err)
+
           sheet = info.worksheets[0]
           step()
         })
@@ -96,7 +103,7 @@ router.get('/brief', function (req, res) {
           step()
         })
       },
-    ], function(err){
+    ], function (err) {
         if( err ) {
           console.log('Error: '+err)
         }
