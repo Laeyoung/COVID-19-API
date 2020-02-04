@@ -80,5 +80,8 @@ curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/l
 **Browser:**
 https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/latest
 
+### Services using Wuhan-Coronavirus-API
+- https://corona-three.now.sh/
+
 ### Original data source
 [Novel Coronavirus (2019-nCoV) Cases](https://docs.google.com/spreadsheets/d/1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM), provided by JHU CSSE
