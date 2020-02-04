@@ -21,86 +21,20 @@ const countries = require('../dataset/countries.json')
 const states = require('../dataset/states.json')
 const cities = require('../dataset/cities.json')
 
+const schedule = require('node-schedule')
+schedule.scheduleJob('42 * * * *', updateDataSet) // Call every hour at 42 minutes
+
+const responseSet = {
+  latest: '{}',
+  brief: '{}'
+}
+
 router.get('/latest', function (req, res) {
-  let sheet
-
-  async.series(
-    [
-      function setAuth(step) {
-        doc.useServiceAccountAuth(creds, step)
-      },
-      function getInfoAndWorksheets(step) {
-        doc.getInfo(function(err, info) {
-          console.log('Loaded doc: '+info.title+' by '+info.author.email)
-          sheet = info.worksheets[0]
-          console.log('sheet 1: '+sheet.title+' '+sheet.rowCount+'x'+sheet.colCount)
-          step()
-        })
-      },
-      function workingWithRows(step) {
-        // google provides some query options
-        sheet.getRows({
-          offset: 1,
-          limit: 1000,
-          orderby: 'col2'
-        }, function( err, rows ){
-          console.log('Read '+rows.length+' rows')
-
-          res.status(200).send(
-            JSON.stringify(
-              rows.map(row => addLocation(row)),
-              replacer
-            )
-          )
-          step()
-        })
-      },
-    ], function(err){
-        if( err ) {
-          console.log('Error: '+err)
-        }
-    })
+  res.status(200).send(responseSet.latest)
 })
 
 router.get('/brief', function (req, res) {
-  let sheet
-
-  async.series(
-    [
-      function getInfoAndWorksheets(step) {
-        doc.getInfo(function(err, info) {
-          sheet = info.worksheets[0]
-          step()
-        })
-      },
-      function workingWithRows(step) {
-        // google provides some query options
-        sheet.getRows({
-          offset: 1,
-          limit: 1000,
-          orderby: 'col2'
-        }, function(err, rows) {
-          const total = {
-            [column.CONFIRMED]: 0,
-            [column.DEATHS]: 0,
-            [column.RECOVERED]: 0
-          }
-
-          for (const row of rows) {
-            total[column.CONFIRMED] += Number(row[column.CONFIRMED])
-            total[column.DEATHS] += Number(row[column.DEATHS])
-            total[column.RECOVERED] += Number(row[column.RECOVERED])
-          }
-
-          res.status(200).json(total)
-          step()
-        })
-      },
-    ], function(err){
-        if( err ) {
-          console.log('Error: '+err)
-        }
-    })
+  res.status(200).json(responseSet.brief)
 })
 
 function replacer(key, value) {
@@ -140,5 +74,61 @@ function addLocation(item) {
 
   return item
 }
+
+function updateDataSet() {
+  console.log('Updated at ' + new Date().toISOString())
+
+  let sheet
+
+  async.series(
+    [
+      function setAuth(step) {
+        doc.useServiceAccountAuth(creds, step)
+      },
+      function getInfoAndWorksheets(step) {
+        doc.getInfo(function (err, info) {
+          if (err) return res.status(400).send(err)
+
+          console.log('Loaded doc: '+info.title+' by '+info.author.email)
+          sheet = info.worksheets[0]
+          console.log('sheet 1: '+sheet.title+' '+sheet.rowCount+'x'+sheet.colCount)
+          step()
+        })
+      },
+      function workingWithRows(step) {
+        // google provides some query options
+        sheet.getRows({
+          offset: 1,
+          limit: 1000,
+          orderby: 'col2'
+        }, function (err, rows) {
+          console.log('Read '+rows.length+' rows')
+
+          responseSet.latest = JSON.stringify(
+            rows.map(row => addLocation(row)),
+            replacer
+          )
+
+          const total = {
+            [column.CONFIRMED]: 0,
+            [column.DEATHS]: 0,
+            [column.RECOVERED]: 0
+          }
+
+          for (const row of rows) {
+            total[column.CONFIRMED] += Number(row[column.CONFIRMED])
+            total[column.DEATHS] += Number(row[column.DEATHS])
+            total[column.RECOVERED] += Number(row[column.RECOVERED])
+          }
+
+          responseSet.brief = total
+          step()
+        })
+      },
+    ], function (err) {
+        if (err) console.log('Error: ' + err)
+    })
+}
+updateDataSet()
 
 module.exports = router
