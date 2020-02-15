@@ -10,7 +10,7 @@ info:
   version: 0.1.0
 
 servers:
-  - url: https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/
+  - url: https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/
 
 tags:
 - name: Johns Hopkins CSSE

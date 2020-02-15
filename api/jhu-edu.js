@@ -29,6 +29,45 @@ const responseSet = {
   brief: '{}'
 }
 
+const request=require('request')
+const csv=require('csvtojson')
+
+const csvPath = {
+  confirmed: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
+  deaths: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv",
+  recovered: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"
+}
+
+const dataSource = {
+  confirmed: {},
+  deaths: {},
+  recovered: {}
+}
+
+Object.entries(csvPath).forEach(([category, path]) => {
+  console.log(category + ': ' + path)
+
+  let index = 0
+
+  csv()
+    .fromStream(request.get(path))
+    .subscribe((json) => {
+      dataSource[category][index++] = json
+      //console.log(json)
+
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    }, function onError (_err) {
+
+    }, function onComplete () {
+      console.log(Object.keys(dataSource[category]).length)
+      //console.log(recovered)
+    })
+})
+
+
+
 router.get('/latest', function (req, res) {
   res.status(200).send(responseSet.latest)
 })
@@ -37,7 +76,7 @@ router.get('/brief', function (req, res) {
   res.status(200).json(responseSet.brief)
 })
 
-function replacer(key, value) {
+function replacer (key, value) {
   switch (key) {
     case 'id':
     case '_xml':
@@ -48,7 +87,7 @@ function replacer(key, value) {
   }
 }
 
-function addLocation(item) {
+function addLocation (item) {
   if (item.provincestate && states[item.provincestate]) {
     const state = states[item.provincestate]
 
@@ -75,17 +114,17 @@ function addLocation(item) {
   return item
 }
 
-function updateDataSet() {
+function updateDataSet () {
   console.log('Updated at ' + new Date().toISOString())
 
   let sheet
 
   async.series(
     [
-      function setAuth(step) {
+      function setAuth (step) {
         doc.useServiceAccountAuth(creds, step)
       },
-      function getInfoAndWorksheets(step) {
+      function getInfoAndWorksheets (step) {
         doc.getInfo(function (err, info) {
           if (err) return res.status(400).send(err)
 
@@ -95,14 +134,14 @@ function updateDataSet() {
           step()
         })
       },
-      function workingWithRows(step) {
+      function workingWithRows (step) {
         // google provides some query options
         sheet.getRows({
           offset: 1,
           limit: 1000,
           orderby: 'col2'
-        }, function (err, rows) {
-          console.log('Read '+rows.length+' rows')
+        }, function (_err, rows) {
+          console.log('Read ' + rows.length + ' rows')
 
           responseSet.latest = JSON.stringify(
             rows.map(row => addLocation(row)),
@@ -124,9 +163,9 @@ function updateDataSet() {
           responseSet.brief = total
           step()
         })
-      },
+      }
     ], function (err) {
-        if (err) console.log('Error: ' + err)
+      if (err) console.log('Error: ' + err)
     })
 }
 updateDataSet()
