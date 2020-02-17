@@ -1,12 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-const GoogleSpreadsheet = require('google-spreadsheet')
-const async = require('async')
-
-// spreadsheet key is the long id in the sheets URL
-const doc = new GoogleSpreadsheet('1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM')
-const creds = require('../google-generated-creds.json')
 const column = {
   PROVINCE_STATE: 'provincestate',
   COUNTRY_REGION: 'countryregion',
@@ -95,7 +89,7 @@ function updateCSVDataSet () {
 
       responseSet.brief = brief
       responseSet.latest = JSON.stringify(Object.values(latest))
-      console.log(brief)
+      console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}`)
     })
     .catch((error) => {
       console.log('Error on queryPromise: ' + error)

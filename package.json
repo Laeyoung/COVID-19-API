@@ -1,6 +1,6 @@
 {
   "name": "wuhan-coronavirus-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "API Service for tracking the Wuhan Coronavirus",
   "main": "server.js",
   "scripts": {
@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/Laeyoung/Wuhan-Coronavirus-API#readme",
   "dependencies": {
-    "csvtojson": "^2.0.10",
     "express": "^4.17.1",
-    "google-spreadsheet": "^2.0.8",
-    "node-schedule": "^1.3.2"
+    "csvtojson": "^2.0.10",
+    "node-schedule": "^1.3.2",
+    "request": "^2.87.0"
   }
 }
