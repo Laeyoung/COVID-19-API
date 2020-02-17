@@ -16,6 +16,9 @@ const column = {
   RECOVERED: 'recovered'
 }
 
+const request = require('request')
+const csv = require('csvtojson')
+
 // World cities dataset from https://simplemaps.com/data/world-cities
 const countries = require('../dataset/countries.json')
 const states = require('../dataset/states.json')
@@ -25,17 +28,15 @@ const schedule = require('node-schedule')
 schedule.scheduleJob('42 * * * *', updateDataSet) // Call every hour at 42 minutes
 
 const responseSet = {
-  latest: '{}',
-  brief: '{}'
+  brief: '{}',
+  latest: '{}'
 }
 
-const request=require('request')
-const csv=require('csvtojson')
 
 const csvPath = {
-  confirmed: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
-  deaths: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv",
-  recovered: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"
+  confirmed: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv',
+  deaths: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv',
+  recovered: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 }
 
 const dataSource = {
@@ -44,29 +45,57 @@ const dataSource = {
   recovered: {}
 }
 
+
+const queryPromise = []
 Object.entries(csvPath).forEach(([category, path]) => {
-  console.log(category + ': ' + path)
-
-  let index = 0
-
-  csv()
-    .fromStream(request.get(path))
-    .subscribe((json) => {
-      dataSource[category][index++] = json
-      //console.log(json)
-
-      return new Promise((resolve, reject) => {
-        resolve()
-      })
-    }, function onError (_err) {
-
-    }, function onComplete () {
-      console.log(Object.keys(dataSource[category]).length)
-      //console.log(recovered)
-    })
+  queryPromise.push(queryCsvAndSave(path, category))
 })
+Promise.all(queryPromise)
+  .then((_values) => {
+    console.log('all done')
 
+    const latest = {}
+    const brief = {
+      [column.CONFIRMED]: 0,
+      [column.DEATHS]: 0,
+      [column.RECOVERED]: 0
+    }
 
+    for (const [category, value] of Object.entries(dataSource)) {
+      console.log(`${category}: ${value}`)
+
+      for (const [name, item] of Object.entries(value)) {
+        const keys = Object.keys(item)
+        const latestCount = Number(item[keys[keys.length - 1]])
+
+        // For brief
+        brief[category] += latestCount
+
+        // For latest
+        if (!Object.prototype.hasOwnProperty.call(latest, name)) {
+          latest[name] = {
+            [column.PROVINCE_STATE]: item['Province/State'],
+            [column.COUNTRY_REGION]: item['Country/Region']
+          }
+        }
+
+        latest[name][category] = latestCount
+        if (Object.prototype.hasOwnProperty.call(item, 'Lat') &&
+          Object.prototype.hasOwnProperty.call(item, 'Long')) {
+          latest[name].location = {
+            lat: Number(item.Lat),
+            lng: Number(item.Long)
+          }
+        }
+      }
+    }
+
+    responseSet.brief = brief
+    responseSet.latest = JSON.stringify(Object.values(latest))
+  })
+  .catch((error) => {
+    console.log('Error on queryPromise: ' + error)
+  })
 
 router.get('/latest', function (req, res) {
   res.status(200).send(responseSet.latest)
@@ -75,6 +104,24 @@ router.get('/latest', function (req, res) {
 router.get('/brief', function (req, res) {
   res.status(200).json(responseSet.brief)
 })
+
+function queryCsvAndSave (path, category) {
+  return csv()
+    .fromStream(request.get(path))
+    .subscribe((json) => {
+      if (json['Province/State']) {
+        const provincestate = json['Province/State']
+        dataSource[category][provincestate] = json
+      } else if (json['Country/Region']) {
+        const countryregion = json['Country/Region']
+        dataSource[category][countryregion] = json
+      }
+
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    })
+}
 
 function replacer (key, value) {
   switch (key) {
