@@ -7,7 +7,7 @@ API Service for tracking the Wuhan Coronavirus
 ## API Document
 
 ### Endpoint
-https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api
+https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/
 
 ### Brief
 
@@ -29,11 +29,11 @@ Content-Type: application/json
 
 **Curl:**
 ```sh
-curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/brief" -H "accept: application/json"
+curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/brief" -H "accept: application/json"
 ```
 
 **Browser:**
-https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/brief
+https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/brief
 
 ### Latest
 
@@ -74,11 +74,11 @@ Content-Type: application/json
 
 **Curl:**
 ```sh
-curl -X GET "https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/latest" -H "accept: application/json"
+curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest" -H "accept: application/json"
 ```
 
 **Browser:**
-https://endpoint.ainize.ai/laeyoung/wuhan-coronavirus-api/jhu-edu/latest
+https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
 
 ### Services using Wuhan-Coronavirus-API
 - https://corona-three.now.sh/
