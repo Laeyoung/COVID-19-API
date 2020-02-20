@@ -1,4 +1,6 @@
-# Wuhan-Coronavirus-API
+# Wuhan-Coronavirus-API [![Docker Pulls](https://img.shields.io/docker/pulls/laeyoung/wuhan-coronavirus-api?style=plastic)](https://hub.docker.com/r/laeyoung/wuhan-coronavirus-api/)
+
+
 API Service for tracking the Wuhan Coronavirus
 
 ## Try it
