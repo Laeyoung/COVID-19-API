@@ -48,29 +48,30 @@ GET /jhu-edu/latest
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[{
-	"provincestate": "Hubei",
-	"countryregion": "Mainland China",
-	"lastupdate": "2/2/2020 23:43",
-	"confirmed": "11177",
-	"deaths": "350",
-	"recovered": "295",
-	"location": {
-		"lat": 32.52,
-		"lng": 111.5
-	}
-}, {
-	"provincestate": "Zhejiang",
-	"countryregion": "Mainland China",
-	"lastupdate": "2/3/2020 1:33",
-	"confirmed": "724",
-	"deaths": "0",
-	"recovered": "36",
-	"location": {
-		"lat": 28.4504,
-		"lng": 119.9
-	}
-}, ...
+[
+  {
+    "provincestate": "Anhui",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T07:21:21.001Z",
+    "confirmed": 990,
+    "deaths": 6,
+    "recovered": 821,
+    "location": {
+      "lat": 31.8257,
+      "lng": 117.2264
+    }
+  }, {
+    "provincestate": "Beijing",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T07:21:21.001Z",
+    "confirmed": 410,
+    "deaths": 7,
+    "recovered": 257,
+    "location": {
+      "lat": 40.1824,
+      "lng": 116.4142
+    }
+  }, ...
 ]
 ```
 
@@ -82,8 +83,73 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/l
 **Browser:**
 https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
 
+
+### Timeseries
+
+**Request:**
+```json
+GET /jhu-edu/timeseries
+```
+**Successful Response:**
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+  {
+    "provincestate": "Anhui",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T08:15:03.208Z",
+    "location": {
+      "lat": 31.8257,
+      "lng": 117.2264
+    },
+    "timeseries": {
+      "1/22/20": {
+        "confirmed": 1,
+        "deaths": 0,
+        "recovered": 0
+      },
+      "1/23/20": {
+        "confirmed": 9,
+        "deaths": 0,
+        "recovered": 0
+      }, ...
+    }
+  }, {
+    "provincestate": "Beijing",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T08:15:03.208Z",
+    "location": {
+      "lat": 40.1824,
+      "lng": 116.4142
+    },
+    "timeseries": {
+      "1/22/20": {
+        "confirmed": 14,
+        "deaths": 0,
+        "recovered": 0
+      },
+      "1/23/20": {
+        "confirmed": 22,
+        "deaths": 0,
+        "recovered": 0
+      }, ...
+    }
+  }, ...
+]
+```
+
+**Curl:**
+```sh
+curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries" -H "accept: application/json"
+```
+
+**Browser:**
+https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
+
 ### Services using Wuhan-Coronavirus-API
 - https://corona-three.now.sh/
 
 ### Original data source
-[Novel Coronavirus (2019-nCoV) Cases](https://docs.google.com/spreadsheets/d/1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM), provided by JHU CSSE
+[Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19), provided by JHU CSSE

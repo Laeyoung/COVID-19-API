@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const nestedProperty = require('nested-property')
+
 const column = {
   PROVINCE_STATE: 'provincestate',
   COUNTRY_REGION: 'countryregion',
@@ -28,15 +30,21 @@ schedule.scheduleJob('42 * * * *', updateCSVDataSet) // Call every hour at 42 mi
 
 const responseSet = {
   brief: '{}',
-  latest: '{}'
+  latest: '{}',
+  timeseries: '{}'
 }
+let lastUpdate
+
+router.get('/brief', function (req, res) {
+  res.status(200).json(responseSet.brief)
+})
 
 router.get('/latest', function (req, res) {
   res.status(200).send(responseSet.latest)
 })
 
-router.get('/brief', function (req, res) {
-  res.status(200).json(responseSet.brief)
+router.get('/timeseries', function (req, res) {
+  res.status(200).send(responseSet.timeseries)
 })
 
 function updateCSVDataSet () {
@@ -47,6 +55,7 @@ function updateCSVDataSet () {
     deaths: {},
     recovered: {}
   }
+  lastUpdate = new Date().toISOString()
   const queryPromise = []
 
   Object.entries(csvPath).forEach(([category, path]) => {
@@ -54,12 +63,13 @@ function updateCSVDataSet () {
   })
   Promise.all(queryPromise)
     .then((_values) => {
-      const latest = {}
       const brief = {
         [column.CONFIRMED]: 0,
         [column.DEATHS]: 0,
         [column.RECOVERED]: 0
       }
+      const latest = {}
+      const timeseries = {}
 
       for (const [category, value] of Object.entries(dataSource)) {
         for (const [name, item] of Object.entries(value)) {
@@ -70,25 +80,20 @@ function updateCSVDataSet () {
           brief[category] += latestCount
 
           // For latest
-          if (!Object.prototype.hasOwnProperty.call(latest, name)) {
-            latest[name] = {
-              [column.PROVINCE_STATE]: item['Province/State'],
-              [column.COUNTRY_REGION]: item['Country/Region']
-            }
-          }
+          createPropertyIfNeed(latest, name, item)
           latest[name][category] = latestCount
-          if (Object.prototype.hasOwnProperty.call(item, 'Lat') &&
-            Object.prototype.hasOwnProperty.call(item, 'Long')) {
-            latest[name].location = {
-              lat: Number(item.Lat),
-              lng: Number(item.Long)
-            }
+
+          // For timeseries
+          createPropertyIfNeed(timeseries, name, item)
+          for (const date of keys.slice(4)) {
+            nestedProperty.set(timeseries[name], `timeseries.${date}.${category}`, Number(item[date]))
           }
         }
       }
 
       responseSet.brief = brief
       responseSet.latest = JSON.stringify(Object.values(latest))
+      responseSet.timeseries = JSON.stringify(Object.values(timeseries))
       console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}`)
     })
     .catch((error) => {
@@ -112,6 +117,20 @@ function queryCsvAndSave (dataSource, path, category) {
         resolve()
       })
     })
+}
+
+function createPropertyIfNeed (target, name, item) {
+  if (!nestedProperty.has(target, name)) {
+    target[name] = {
+      [column.PROVINCE_STATE]: item['Province/State'],
+      [column.COUNTRY_REGION]: item['Country/Region'],
+      [column.LAST_UPDATE]: lastUpdate,
+      location: {
+        lat: Number(item.Lat),
+        lng: Number(item.Long)
+      }
+    }
+  }
 }
 
 function replacer (key, value) {

@@ -51,3 +51,20 @@ paths:
           description: Bad Request Error
         default:
           description: Unexpected Error
+  /jhu-edu/timeseries:
+    get:
+      tags:
+      - Johns Hopkins CSSE
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                properties:
+                  result:
+                    type: string
+        '400':
+          description: Bad Request Error
+        default:
+          description: Unexpected Error          
