@@ -83,6 +83,71 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/l
 **Browser:**
 https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
 
+
+### Timeseries
+
+**Request:**
+```json
+GET /jhu-edu/timeseries
+```
+**Successful Response:**
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+  {
+    "provincestate": "Anhui",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T08:15:03.208Z",
+    "location": {
+      "lat": 31.8257,
+      "lng": 117.2264
+    },
+    "timeseries": {
+      "1/22/20": {
+        "confirmed": 1,
+        "deaths": 0,
+        "recovered": 0
+      },
+      "1/23/20": {
+        "confirmed": 9,
+        "deaths": 0,
+        "recovered": 0
+      }, ...
+    }
+  }, {
+    "provincestate": "Beijing",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T08:15:03.208Z",
+    "location": {
+      "lat": 40.1824,
+      "lng": 116.4142
+    },
+    "timeseries": {
+      "1/22/20": {
+        "confirmed": 14,
+        "deaths": 0,
+        "recovered": 0
+      },
+      "1/23/20": {
+        "confirmed": 22,
+        "deaths": 0,
+        "recovered": 0
+      }, ...
+    }
+  }, ...
+]
+```
+
+**Curl:**
+```sh
+curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries" -H "accept: application/json"
+```
+
+**Browser:**
+https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
+
 ### Services using Wuhan-Coronavirus-API
 - https://corona-three.now.sh/
 

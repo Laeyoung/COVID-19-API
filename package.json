@@ -1,6 +1,6 @@
 {
   "name": "wuhan-coronavirus-api",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "API Service for tracking the Wuhan Coronavirus",
   "main": "server.js",
   "scripts": {
