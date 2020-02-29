@@ -46,29 +46,30 @@ GET /jhu-edu/latest
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[{
-	"provincestate": "Hubei",
-	"countryregion": "Mainland China",
-	"lastupdate": "2/2/2020 23:43",
-	"confirmed": "11177",
-	"deaths": "350",
-	"recovered": "295",
-	"location": {
-		"lat": 32.52,
-		"lng": 111.5
-	}
-}, {
-	"provincestate": "Zhejiang",
-	"countryregion": "Mainland China",
-	"lastupdate": "2/3/2020 1:33",
-	"confirmed": "724",
-	"deaths": "0",
-	"recovered": "36",
-	"location": {
-		"lat": 28.4504,
-		"lng": 119.9
-	}
-}, ...
+[
+  {
+    "provincestate": "Anhui",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T07:21:21.001Z",
+    "confirmed": 990,
+    "deaths": 6,
+    "recovered": 821,
+    "location": {
+      "lat": 31.8257,
+      "lng": 117.2264
+    }
+  }, {
+    "provincestate": "Beijing",
+    "countryregion": "Mainland China",
+    "lastupdate": "2020-02-29T07:21:21.001Z",
+    "confirmed": 410,
+    "deaths": 7,
+    "recovered": 257,
+    "location": {
+      "lat": 40.1824,
+      "lng": 116.4142
+    }
+  }, ...
 ]
 ```
 
@@ -84,4 +85,4 @@ https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
 - https://corona-three.now.sh/
 
 ### Original data source
-[Novel Coronavirus (2019-nCoV) Cases](https://docs.google.com/spreadsheets/d/1wQVypefm946ch4XDp37uZ-wartW4V7ILdg-qYiDXUHM), provided by JHU CSSE
+[Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19), provided by JHU CSSE

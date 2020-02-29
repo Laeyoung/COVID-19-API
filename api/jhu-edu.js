@@ -47,6 +47,7 @@ function updateCSVDataSet () {
     deaths: {},
     recovered: {}
   }
+  const lastUpdate = new Date().toISOString()
   const queryPromise = []
 
   Object.entries(csvPath).forEach(([category, path]) => {
@@ -73,7 +74,8 @@ function updateCSVDataSet () {
           if (!Object.prototype.hasOwnProperty.call(latest, name)) {
             latest[name] = {
               [column.PROVINCE_STATE]: item['Province/State'],
-              [column.COUNTRY_REGION]: item['Country/Region']
+              [column.COUNTRY_REGION]: item['Country/Region'],
+              [column.LAST_UPDATE]: lastUpdate
             }
           }
           latest[name][category] = latestCount
