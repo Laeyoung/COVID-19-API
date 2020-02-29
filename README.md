@@ -1,5 +1,7 @@
-# Wuhan-Coronavirus-API
-API Service for tracking the Wuhan Coronavirus
+# COVID-19-API [![Docker Pulls](https://img.shields.io/docker/pulls/laeyoung/wuhan-coronavirus-api?style=plastic)](https://hub.docker.com/r/laeyoung/wuhan-coronavirus-api/)
+
+
+API Service for tracking the COVID-19
 
 ## Try it
 [![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=github.com/Laeyoung/Wuhan-Coronavirus-API)
