@@ -1,4 +1,4 @@
-# COVID-19-API [![Docker Pulls](https://img.shields.io/docker/pulls/laeyoung/wuhan-coronavirus-api?style=plastic)](https://hub.docker.com/r/laeyoung/wuhan-coronavirus-api/)
+# COVID-19-API [![Docker Pulls](https://img.shields.io/docker/pulls/laeyoung/wuhan-coronavirus-api?style=plastic)](https://hub.docker.com/r/laeyoung/wuhan-coronavirus-api/) [![Total alerts](https://img.shields.io/lgtm/alerts/g/Laeyoung/COVID-19-API.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Laeyoung/COVID-19-API/alerts/)
 
 
 API Service for tracking the COVID-19
