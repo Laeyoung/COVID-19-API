@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+const lookup = require('country-code-lookup')
 const nestedProperty = require('nested-property')
 
 const column = {
@@ -24,6 +25,8 @@ const csvPath = {
 const countries = require('../dataset/countries.json')
 const states = require('../dataset/states.json')
 const cities = require('../dataset/cities.json')
+
+const fixedCountryCodes = require('../dataset/country-codes.json')
 
 const schedule = require('node-schedule')
 schedule.scheduleJob('42 * * * *', updateCSVDataSet) // Call every hour at 42 minutes
@@ -130,45 +133,22 @@ function createPropertyIfNeed (target, name, item) {
         lng: Number(item.Long)
       }
     }
-  }
-}
 
-function replacer (key, value) {
-  switch (key) {
-    case 'id':
-    case '_xml':
-    case '_links':
-      return undefined
-    default:
-      return value
-  }
-}
-
-function addLocation (item) {
-  if (item.provincestate && states[item.provincestate]) {
-    const state = states[item.provincestate]
-
-    item.location = {
-      lat: state.lat,
-      lng: state.lng
-    }
-  } else if (item.countryregion && countries[item.countryregion]) { 
-    const country = countries[item.countryregion]
-
-    item.location = {
-      lat: country.lat,
-      lng: country.lng
-    }
-  } else if (item.provincestate && cities[item.provincestate]) { // Added for US case.
-    const city = cities[item.provincestate]
-
-    item.location = {
-      lat: city.lat,
-      lng: city.lng
+    // Append country codes
+    const countryName = item['Country/Region']
+    if (lookup.byCountry(countryName)) {
+      appendCountryCode(lookup.byCountry(countryName))
+    } else if (fixedCountryCodes[countryName]) {
+      appendCountryCode(lookup.byCountry(fixedCountryCodes[countryName]))
     }
   }
 
-  return item
+  function appendCountryCode (countryCode) {
+    target[name].countrycode = {
+      iso2: countryCode.iso2,
+      iso3: countryCode.iso3
+    }
+  }
 }
 
 updateCSVDataSet()
