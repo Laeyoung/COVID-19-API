@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Laeyoung/Wuhan-Coronavirus-API#readme",
   "dependencies": {
+    "country-code-lookup": "0.0.16",
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "nested-property": "^2.0.0",
