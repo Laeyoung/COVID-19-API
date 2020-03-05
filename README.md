@@ -164,7 +164,7 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/t
 **Browser:**
 https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
 
-### Services using Wuhan-Coronavirus-API
+### Services using COVID-19-API
 - https://corona-board.soaple.endpoint.ainize.ai/
 - https://corona-three.now.sh/
 
