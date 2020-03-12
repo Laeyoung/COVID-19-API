@@ -21,11 +21,6 @@ const csvPath = {
   recovered: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 }
 
-// World cities dataset from https://simplemaps.com/data/world-cities
-const countries = require('../dataset/countries.json')
-const states = require('../dataset/states.json')
-const cities = require('../dataset/cities.json')
-
 const fixedCountryCodes = require('../dataset/country-codes.json')
 
 const schedule = require('node-schedule')
@@ -43,12 +38,44 @@ router.get('/brief', function (req, res) {
 })
 
 router.get('/latest', function (req, res) {
-  res.status(200).send(responseSet.latest)
+  const { iso2, iso3, onlyCountries } = req.query
+
+  console.log(`iso2: ${iso2}, iso3: ${iso3}, onlyCountries: ${onlyCountries}`)
+
+  let latest = responseSet.latest
+
+  if (iso2) latest = filterIso2code(latest, iso2)
+  if (iso3) latest = filterIso3code(latest, iso3)
+
+  res.status(200).send(JSON.stringify(latest))
 })
 
 router.get('/timeseries', function (req, res) {
-  res.status(200).send(responseSet.timeseries)
+  const { iso2, iso3, onlyCountries } = req.query
+
+  console.log(`iso2: ${iso2}, iso3: ${iso3}, onlyCountries: ${onlyCountries}`)
+
+  let timeseries = responseSet.timeseries
+
+  if (iso2) timeseries = filterIso2code(timeseries, iso2)
+  if (iso3) timeseries = filterIso3code(timeseries, iso3)
+
+  res.status(200).send(JSON.stringify(timeseries))
 })
+
+function filterIso2code (source, code) {
+  return source.filter(item => {
+    const countryCode = item.countrycode ? item.countrycode.iso2 : 'unknown'
+    return countryCode === code
+  })
+}
+
+function filterIso3code (source, code) {
+  return source.filter(item => {
+    const countryCode = item.countrycode ? item.countrycode.iso3 : 'unknown'
+    return countryCode === code
+  })
+}
 
 function updateCSVDataSet () {
   console.log('Updated at ' + new Date().toISOString())
@@ -95,8 +122,8 @@ function updateCSVDataSet () {
       }
 
       responseSet.brief = brief
-      responseSet.latest = JSON.stringify(Object.values(latest))
-      responseSet.timeseries = JSON.stringify(Object.values(timeseries))
+      responseSet.latest = Object.values(latest)
+      responseSet.timeseries = Object.values(timeseries)
       console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}`)
     })
     .catch((error) => {
