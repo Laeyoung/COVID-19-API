@@ -43,8 +43,6 @@ router.get('/brief', function (req, res) {
 router.get('/latest', function (req, res) {
   const { iso2, iso3, onlyCountries } = req.query
 
-  console.log(`iso2: ${iso2}, iso3: ${iso3}, onlyCountries: ${onlyCountries}`)
-
   let latest = onlyCountries ? responseSet.latestOnlyCountries : responseSet.latest
 
   if (iso2) latest = filterIso2code(latest, iso2)
@@ -55,8 +53,6 @@ router.get('/latest', function (req, res) {
 
 router.get('/timeseries', function (req, res) {
   const { iso2, iso3, onlyCountries } = req.query
-
-  console.log(`iso2: ${iso2}, iso3: ${iso3}, onlyCountries: ${onlyCountries}`)
 
   let timeseries = onlyCountries ? responseSet.timeseriesOnlyCountries : responseSet.timeseries
 
@@ -162,7 +158,7 @@ function getMergedByCountry (list) {
       // Overwrite location
       if (item.countrycode) {
         const iso2 = item.countrycode.iso2
-        item.location = iso2CountryLoc[iso2]
+        country.location = iso2CountryLoc[iso2]
       }
     } else {
       delete item.provincestate
