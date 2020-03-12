@@ -43,6 +43,18 @@ https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/brief
 ```json
 GET /jhu-edu/latest
 ```
+
+Options
+- Filter by country's iso2 or iso3 code
+```json
+GET /jhu-edu/latest?iso2=US
+```
+- Make the sum of all the cities or the states in those countries
+```json
+GET /jhu-edu/latest?onlyCountries=true
+```
+You can uses both options together.
+
 **Successful Response:**
 ```json
 HTTP/1.1 200 OK
@@ -89,7 +101,8 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/l
 ```
 
 **Browser:**
-https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
+- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
+- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?iso2=US&onlyCountries=true
 
 
 ### Timeseries
@@ -98,6 +111,18 @@ https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
 ```json
 GET /jhu-edu/timeseries
 ```
+
+Options
+- Filter by country's iso2 or iso3 code
+```json
+GET /jhu-edu/timeseries?iso2=US
+```
+- Make the sum of all the cities or the states in those countries
+```json
+GET /jhu-edu/timeseries?onlyCountries=true
+```
+You can uses both options together.
+
 **Successful Response:**
 ```json
 HTTP/1.1 200 OK
@@ -162,7 +187,8 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/t
 ```
 
 **Browser:**
-https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
+- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
+- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries?iso2=US&onlyCountries=true
 
 ### Services using COVID-19-API
 - https://corona-board.soaple.endpoint.ainize.ai/
