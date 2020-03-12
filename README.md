@@ -59,6 +59,10 @@ Content-Type: application/json
     "location": {
       "lat": 31.8257,
       "lng": 117.2264
+    },
+    "countrycode": {
+      "iso2": "CN",
+      "iso3": "CHN"
     }
   }, {
     "provincestate": "Beijing",
@@ -70,6 +74,10 @@ Content-Type: application/json
     "location": {
       "lat": 40.1824,
       "lng": 116.4142
+    },
+    "countrycode": {
+      "iso2": "CN",
+      "iso3": "CHN"
     }
   }, ...
 ]
@@ -104,6 +112,10 @@ Content-Type: application/json
       "lat": 31.8257,
       "lng": 117.2264
     },
+    "countrycode": {
+      "iso2": "CN",
+      "iso3": "CHN"
+    },
     "timeseries": {
       "1/22/20": {
         "confirmed": 1,
@@ -124,6 +136,10 @@ Content-Type: application/json
       "lat": 40.1824,
       "lng": 116.4142
     },
+    "countrycode": {
+      "iso2": "CN",
+      "iso3": "CHN"
+    },    
     "timeseries": {
       "1/22/20": {
         "confirmed": 14,
@@ -148,7 +164,7 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/t
 **Browser:**
 https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
 
-### Services using Wuhan-Coronavirus-API
+### Services using COVID-19-API
 - https://corona-board.soaple.endpoint.ainize.ai/
 - https://corona-three.now.sh/
 
