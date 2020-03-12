@@ -29,7 +29,9 @@ schedule.scheduleJob('42 * * * *', updateCSVDataSet) // Call every hour at 42 mi
 const responseSet = {
   brief: '{}',
   latest: '{}',
-  timeseries: '{}'
+  latestOnlyCountries: '{}',
+  timeseries: '{}',
+  timeseriesOnlyCountries: '{}'
 }
 let lastUpdate
 
@@ -42,7 +44,7 @@ router.get('/latest', function (req, res) {
 
   console.log(`iso2: ${iso2}, iso3: ${iso3}, onlyCountries: ${onlyCountries}`)
 
-  let latest = responseSet.latest
+  let latest = onlyCountries ? responseSet.latestOnlyCountries : responseSet.latest
 
   if (iso2) latest = filterIso2code(latest, iso2)
   if (iso3) latest = filterIso3code(latest, iso3)
@@ -55,7 +57,7 @@ router.get('/timeseries', function (req, res) {
 
   console.log(`iso2: ${iso2}, iso3: ${iso3}, onlyCountries: ${onlyCountries}`)
 
-  let timeseries = responseSet.timeseries
+  let timeseries = onlyCountries ? responseSet.timeseriesOnlyCountries : responseSet.timeseries
 
   if (iso2) timeseries = filterIso2code(timeseries, iso2)
   if (iso3) timeseries = filterIso3code(timeseries, iso3)
@@ -123,12 +125,60 @@ function updateCSVDataSet () {
 
       responseSet.brief = brief
       responseSet.latest = Object.values(latest)
+      responseSet.latestOnlyCountries = getMergedByCountry(Object.values(latest))
+
       responseSet.timeseries = Object.values(timeseries)
+      responseSet.timeseriesOnlyCountries = getMergedByCountry(Object.values(timeseries))
       console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}`)
     })
     .catch((error) => {
       console.log('Error on queryPromise: ' + error)
     })
+}
+
+function getMergedByCountry (list) {
+  const mergedList = { }
+
+  for (const item of list) {
+    const countryName = item.countryregion
+
+    if (mergedList[countryName]) {
+      const country = mergedList[countryName]
+
+      // for latest api
+      mergeConfirmDeathRecover(country, item)
+
+      // for timeseries api
+      if (item.timeseries) {
+        const timeseries = item.timeseries
+        const mergedTimeseries = country.timeseries
+
+        for (const key of Object.keys(timeseries)) {
+          mergeConfirmDeathRecover(mergedTimeseries[key], timeseries[key])
+        }
+      }
+    } else {
+      delete item.provincestate
+      mergedList[countryName] = item
+    }
+  }
+
+  return Object.values(mergedList)
+}
+
+function mergeConfirmDeathRecover (target, item) {
+  if (!(target && item)) return
+
+  if (item.confirmed) merge(target, item, 'confirmed')
+  if (item.deaths) merge(target, item, 'deaths')
+  if (item.recovered) merge(target, item, 'recovered')
+}
+
+function merge (target, item, key) {
+  const cur = target[key] ? target[key] : 0
+  const add = item[key] ? item[key] : 0
+
+  target[key] = cur + add
 }
 
 function queryCsvAndSave (dataSource, path, category) {
