@@ -161,7 +161,6 @@ function getMergedByCountry (list) {
         country.location = iso2CountryLoc[iso2]
       }
     } else {
-      delete item.provincestate
       mergedList[countryName] = item
     }
   }
