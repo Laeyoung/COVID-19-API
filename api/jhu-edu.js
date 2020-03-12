@@ -22,6 +22,7 @@ const csvPath = {
 }
 
 const fixedCountryCodes = require('../dataset/country-codes.json')
+const iso2CountryLoc = require('../dataset/iso2-country-loc.json')
 
 const schedule = require('node-schedule')
 schedule.scheduleJob('42 * * * *', updateCSVDataSet) // Call every hour at 42 minutes
@@ -156,6 +157,12 @@ function getMergedByCountry (list) {
         for (const key of Object.keys(timeseries)) {
           mergeConfirmDeathRecover(mergedTimeseries[key], timeseries[key])
         }
+      }
+
+      // Overwrite location
+      if (item.countrycode) {
+        const iso2 = item.countrycode.iso2
+        item.location = iso2CountryLoc[iso2]
       }
     } else {
       delete item.provincestate
