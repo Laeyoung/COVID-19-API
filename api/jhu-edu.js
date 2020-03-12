@@ -122,10 +122,15 @@ function updateCSVDataSet () {
 
       responseSet.brief = brief
       responseSet.latest = Object.values(latest)
-      responseSet.latestOnlyCountries = getMergedByCountry(Object.values(latest))
-
       responseSet.timeseries = Object.values(timeseries)
-      responseSet.timeseriesOnlyCountries = getMergedByCountry(Object.values(timeseries))
+
+      // Uses deep copy
+      // https://stackoverflow.com/a/122704/3614334
+      const copyLatest = JSON.parse(JSON.stringify(latest))
+      responseSet.latestOnlyCountries = getMergedByCountry(Object.values(copyLatest))
+      const copyTimeseries = JSON.parse(JSON.stringify(timeseries))
+      responseSet.timeseriesOnlyCountries = getMergedByCountry(Object.values(copyTimeseries))
+
       console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}`)
     })
     .catch((error) => {
@@ -161,6 +166,7 @@ function getMergedByCountry (list) {
         country.location = iso2CountryLoc[iso2]
       }
     } else {
+      delete item.provincestate
       mergedList[countryName] = item
     }
   }
