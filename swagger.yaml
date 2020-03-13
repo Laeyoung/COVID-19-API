@@ -1,13 +1,13 @@
 openapi: 3.0.0
 
 info:
-  title: API Service for tracking the Wuhan Coronavirus
-  description: 'This repository provides API Service for tracking the Wuhan Coronavirus using Novel Coronavirus (2019-nCoV) Cases[link](https://docs.google.com/spreadsheets/u/1/d/1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w/htmlview), provided by [JHU CSSE](https://systems.jhu.edu/).'
+  title: API Service for tracking the COVID-19
+  description: 'This repository provides API Service for tracking the Coronavirus(COVID-19) using Novel Coronavirus (COVID-19) Cases[link](https://github.com/CSSEGISandData/COVID-19), provided by [JHU CSSE](https://systems.jhu.edu/).'
   contact:
     email: gadise@gmail.com
   license:
     name: MIT
-  version: 0.1.0
+  version: 0.4.4
 
 servers:
   - url: https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/
@@ -38,6 +38,26 @@ paths:
     get:
       tags:
       - Johns Hopkins CSSE
+      parameters:
+        - name: iso2
+          in: query
+          description: Filter by iso2 country code
+          schema:
+            type: string
+            default: US
+          required: false
+        - name: iso3
+          in: query
+          description: Filter by iso3 country code
+          schema:
+            type: string
+          required: false
+        - name: onlyCountries
+          in: query
+          description: Make the sum of all the cities or the states in those countries
+          schema:
+            type: boolean
+          required: false
       responses:
         '200':
           content:
@@ -55,6 +75,26 @@ paths:
     get:
       tags:
       - Johns Hopkins CSSE
+      parameters:
+        - name: iso2
+          in: query
+          description: Filter by iso2 country code
+          schema:
+            type: string
+            default: US
+          required: false
+        - name: iso3
+          in: query
+          description: Filter by iso3 country code
+          schema:
+            type: string
+          required: false
+        - name: onlyCountries
+          in: query
+          description: Make the sum of all the cities or the states in those countries
+          schema:
+            type: boolean
+          required: false    
       responses:
         '200':
           content:
