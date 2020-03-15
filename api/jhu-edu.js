@@ -62,20 +62,6 @@ router.get('/timeseries', function (req, res) {
   res.status(200).send(JSON.stringify(timeseries))
 })
 
-function filterIso2code (source, code) {
-  return source.filter(item => {
-    const countryCode = item.countrycode ? item.countrycode.iso2 : 'unknown'
-    return countryCode === code
-  })
-}
-
-function filterIso3code (source, code) {
-  return source.filter(item => {
-    const countryCode = item.countrycode ? item.countrycode.iso3 : 'unknown'
-    return countryCode === code
-  })
-}
-
 function updateCSVDataSet () {
   console.log('Updated at ' + new Date().toISOString())
 
@@ -131,7 +117,7 @@ function updateCSVDataSet () {
       const copyTimeseries = JSON.parse(JSON.stringify(timeseries))
       responseSet.timeseriesOnlyCountries = getMergedByCountry(Object.values(copyTimeseries))
 
-      console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}`)
+      console.log(`Confirmed: ${brief.confirmed}, Deaths: ${brief.deaths}, Recovered: ${brief.recovered}`)
     })
     .catch((error) => {
       console.log('Error on queryPromise: ' + error)
@@ -187,6 +173,20 @@ function merge (target, item, key) {
   const add = item[key] ? item[key] : 0
 
   target[key] = cur + add
+}
+
+function filterIso2code (source, code) {
+  return source.filter(item => {
+    const countryCode = item.countrycode ? item.countrycode.iso2 : 'unknown'
+    return countryCode === code
+  })
+}
+
+function filterIso3code (source, code) {
+  return source.filter(item => {
+    const countryCode = item.countrycode ? item.countrycode.iso3 : 'unknown'
+    return countryCode === code
+  })
 }
 
 function queryCsvAndSave (dataSource, path, category) {
