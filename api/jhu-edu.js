@@ -89,7 +89,8 @@ function updateCSVDataSet () {
       for (const [category, value] of Object.entries(dataSource)) {
         for (const [name, item] of Object.entries(value)) {
           const keys = Object.keys(item)
-          const latestCount = Number(item[keys[keys.length - 1]])
+          const cell = item[keys[keys.length - 1]]
+          const latestCount = cell ? Number(cell) : Number(item[keys[keys.length - 2]])
 
           // For brief
           brief[category] += latestCount
