@@ -8,7 +8,14 @@ const tempFilePath = './dataset/temp-kcdc.js'
 const tempModulePath = '../dataset/temp-kcdc.js'
 const exportModule = 'module.exports = koreaRegionalData;'
 
-let koreaRegionalData = { }
+const schedule = require('node-schedule')
+schedule.scheduleJob('12 * * * *', updateDataSet) // Call every hour at 12 minutes
+
+let koreaRegionalData = {}
+
+router.get('/brief', function (req, res) {
+  res.status(200).json(koreaRegionalData)
+})
 
 async function updateDataSet () {
   console.log('Korea KCDC Updated at ' + new Date().toISOString())
@@ -26,11 +33,13 @@ async function updateDataSet () {
           console.log('Korea KCDC data was saved!')
         } catch (e) {
           console.error(e)
+          koreaRegionalData = {}
         }
       }
     })
   } catch (e) {
     console.error(e)
+    koreaRegionalData = {}
   }
 }
 
