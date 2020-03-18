@@ -107,4 +107,21 @@ paths:
         '400':
           description: Bad Request Error
         default:
-          description: Unexpected Error          
+          description: Unexpected Error
+  /kcdc/breif:
+    get:
+      tags:
+      - KCDC, South Korea
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                properties:
+                  result:
+                    type: string
+        '400':
+          description: Bad Request Error
+        default:
+          description: Unexpected Error                    
