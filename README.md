@@ -192,6 +192,7 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/t
 
 ### Services using COVID-19-API
 - https://corona-board.soaple.endpoint.ainize.ai/
+- https://wordpress.org/plugins/corona-virus-data/ (WordPress plugin)
 - https://corona-three.now.sh/
 
 ### Original data source
