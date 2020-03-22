@@ -192,7 +192,14 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/t
 
 ### Services using COVID-19-API
 - https://corona-board.soaple.endpoint.ainize.ai/
+- https://wordpress.org/plugins/corona-virus-data/ (WordPress plugin)
 - https://corona-three.now.sh/
 
 ### Original data source
 [Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19), provided by JHU CSSE
+
+## License
+This project is released under the [MIT License](http://opensource.org/licenses/MIT). See LICENSE for details.
+
+## Terms of Use
+You can uses this Repo and API service freely, even commercial uses. But this term of use rely on data sources. You have to check each terms of use of data sources ([JHU CSSE](https://github.com/CSSEGISandData/COVID-19/blob/master/README.md), [livecod(kor)](https://github.com/LiveCoronaDetector/livecod/blob/master/README.md)).

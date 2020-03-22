@@ -108,7 +108,7 @@ paths:
           description: Bad Request Error
         default:
           description: Unexpected Error
-  /kcdc/breif:
+  /kcdc/brief:
     get:
       tags:
       - KCDC, South Korea
