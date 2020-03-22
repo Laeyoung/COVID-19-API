@@ -21,6 +21,22 @@ const csvPath = {
   recovered: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 }
 
+const fetch = require('node-fetch')
+const dailyReportDir = 'https://api.github.com/repos/CSSEGISandData/COVID-19/contents/csse_covid_19_data/csse_covid_19_daily_reports'
+fetch(dailyReportDir)
+  .then(res => res.json())
+  .then(json => {
+    const latestDailyCSV = json
+      .filter(file => {
+        return file.name.endsWith('-2020.csv')
+      })
+      .sort((a, b) => {
+        return -a.name.localeCompare(b.name)
+      })[0]
+
+    console.log(latestDailyCSV.download_url)
+  })
+
 const fixedCountryCodes = require('../dataset/country-codes.json')
 const iso2CountryLoc = require('../dataset/iso2-country-loc.json')
 
