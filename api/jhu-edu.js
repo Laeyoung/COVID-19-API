@@ -23,19 +23,6 @@ const csvPath = {
 
 const fetch = require('node-fetch')
 const dailyReportDir = 'https://api.github.com/repos/CSSEGISandData/COVID-19/contents/csse_covid_19_data/csse_covid_19_daily_reports'
-fetch(dailyReportDir)
-  .then(res => res.json())
-  .then(json => {
-    const latestDailyCSV = json
-      .filter(file => {
-        return file.name.endsWith('-2020.csv')
-      })
-      .sort((a, b) => {
-        return -a.name.localeCompare(b.name)
-      })[0]
-
-    console.log(latestDailyCSV.download_url)
-  })
 
 const fixedCountryCodes = require('../dataset/country-codes.json')
 const iso2CountryLoc = require('../dataset/iso2-country-loc.json')
@@ -81,17 +68,19 @@ router.get('/timeseries', function (req, res) {
 function updateCSVDataSet () {
   console.log('Updated at ' + new Date().toISOString())
 
-  const dataSource = {
+  const dataDaily = []
+  const dataTimeseries = {
     confirmed: {},
     deaths: {},
     recovered: {}
   }
   lastUpdate = new Date().toISOString()
-  const queryPromise = []
 
+  const queryPromise = [queryDailyCsvAndSave(dataDaily)]
   Object.entries(csvPath).forEach(([category, path]) => {
-    queryPromise.push(queryCsvAndSave(dataSource, path, category))
+    queryPromise.push(queryTimeseriesCsvAndSave(dataTimeseries, path, category))
   })
+
   Promise.all(queryPromise)
     .then((_values) => {
       const brief = {
@@ -102,14 +91,26 @@ function updateCSVDataSet () {
       const latest = {}
       const timeseries = {}
 
-      for (const [category, value] of Object.entries(dataSource)) {
+      console.log(dataDaily.length)
+      console.log(dataDaily[0])
+
+      // Update breif
+      dataDaily.reduce((brief, item) => {
+        brief[column.CONFIRMED] += item.confirmed
+        brief[column.DEATHS] += item.deaths
+        brief[column.RECOVERED] += item.recovered
+
+        return brief
+      }, brief)
+
+      console.log(brief)
+
+
+      for (const [category, value] of Object.entries(dataTimeseries)) {
         for (const [name, item] of Object.entries(value)) {
           const keys = Object.keys(item)
           const cell = item[keys[keys.length - 1]]
           const latestCount = cell ? Number(cell) : Number(item[keys[keys.length - 2]])
-
-          // For brief
-          brief[category] += latestCount
 
           // For latest
           createPropertyIfNeed(latest, name, item)
@@ -206,16 +207,59 @@ function filterIso3code (source, code) {
   })
 }
 
-function queryCsvAndSave (dataSource, path, category) {
+async function queryDailyCsvAndSave (daily) {
+  daily.length = 0 // clear data
+
+  const path = await fetch(dailyReportDir)
+    .then(res => res.json())
+    .then(json => {
+      const latestDailyCSV = json
+        .filter(file => {
+          return file.name.endsWith('-2020.csv')
+        })
+        .sort((a, b) => {
+          return -a.name.localeCompare(b.name)
+        })[0]
+
+      const path = latestDailyCSV.download_url
+      console.log(path)
+      return path
+    })
+
+  return csv()
+    .fromStream(request.get(path))
+    .subscribe((json) => {
+      daily.push(
+        {
+          provincestate: json['Province/State'],
+          countryregion: json['Country/Region'],
+          lastupdate: json['Last Update'],
+          confirmed: Number(json.Confirmed),
+          deaths: Number(json.Deaths),
+          recovered: Number(json.Recovered),
+          location: {
+            lat: Number(json.Latitude),
+            lng: Number(json.Longitude)
+          }
+        }
+      )
+
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    })
+}
+
+function queryTimeseriesCsvAndSave (timeseries, path, category) {
   return csv()
     .fromStream(request.get(path))
     .subscribe((json) => {
       if (json['Province/State']) {
         const provincestate = json['Province/State']
-        dataSource[category][provincestate] = json
+        timeseries[category][provincestate] = json
       } else if (json['Country/Region']) {
         const countryregion = json['Country/Region']
-        dataSource[category][countryregion] = json
+        timeseries[category][countryregion] = json
       }
 
       return new Promise((resolve, reject) => {
@@ -225,27 +269,23 @@ function queryCsvAndSave (dataSource, path, category) {
 }
 
 function createPropertyIfNeed (target, name, item) {
-  if (!nestedProperty.has(target, name)) {
-    target[name] = {
-      [column.PROVINCE_STATE]: item['Province/State'],
-      [column.COUNTRY_REGION]: item['Country/Region'],
-      [column.LAST_UPDATE]: lastUpdate,
-      location: {
-        lat: Number(item.Lat),
-        lng: Number(item.Long)
-      }
-    }
+  if (nestedProperty.has(target, name)) return
 
-    // Append country codes
-    const countryName = item['Country/Region']
-    if (lookup.byCountry(countryName)) {
-      appendCountryCode(lookup.byCountry(countryName))
-    } else if (fixedCountryCodes[countryName]) {
-      appendCountryCode(lookup.byCountry(fixedCountryCodes[countryName]))
+  target[name] = {
+    [column.PROVINCE_STATE]: item['Province/State'],
+    [column.COUNTRY_REGION]: item['Country/Region'],
+    [column.LAST_UPDATE]: lastUpdate,
+    location: {
+      lat: Number(item.Lat),
+      lng: Number(item.Long)
     }
   }
 
-  function appendCountryCode (countryCode) {
+  // Append country codes
+  const countryName = item['Country/Region']
+  const countryCode = lookup.byCountry(countryName) || lookup.byCountry(fixedCountryCodes[countryName])
+
+  if (countryCode) {
     target[name].countrycode = {
       iso2: countryCode.iso2,
       iso3: countryCode.iso3
