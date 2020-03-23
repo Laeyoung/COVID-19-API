@@ -83,18 +83,12 @@ function updateCSVDataSet () {
 
   Promise.all(queryPromise)
     .then((_values) => {
+      // Update breif
       const brief = {
         [column.CONFIRMED]: 0,
         [column.DEATHS]: 0,
         [column.RECOVERED]: 0
       }
-      const latest = {}
-      const timeseries = {}
-
-      console.log(dataDaily.length)
-      console.log(dataDaily[0])
-
-      // Update breif
       dataDaily.reduce((brief, item) => {
         brief[column.CONFIRMED] += item.confirmed
         brief[column.DEATHS] += item.deaths
@@ -103,21 +97,19 @@ function updateCSVDataSet () {
         return brief
       }, brief)
 
-      console.log(brief)
+      // Update latest
+      const latest = dataDaily.map(item => {
+        appendCountryCode(item, item.countryregion)
+        return item
+      })
 
-
+      // Update timeseries
+      const timeseries = {}
       for (const [category, value] of Object.entries(dataTimeseries)) {
         for (const [name, item] of Object.entries(value)) {
           const keys = Object.keys(item)
-          const cell = item[keys[keys.length - 1]]
-          const latestCount = cell ? Number(cell) : Number(item[keys[keys.length - 2]])
 
-          // For latest
-          createPropertyIfNeed(latest, name, item)
-          latest[name][category] = latestCount
-
-          // For timeseries
-          createPropertyIfNeed(timeseries, name, item)
+          createTimeseriesItemPropertyIfNeed(timeseries, name, item)
           for (const date of keys.slice(4)) {
             nestedProperty.set(timeseries[name], `timeseries.${date}.${category}`, Number(item[date]))
           }
@@ -125,7 +117,7 @@ function updateCSVDataSet () {
       }
 
       responseSet.brief = brief
-      responseSet.latest = Object.values(latest)
+      responseSet.latest = latest
       responseSet.timeseries = Object.values(timeseries)
 
       // Uses deep copy
@@ -221,9 +213,7 @@ async function queryDailyCsvAndSave (daily) {
           return -a.name.localeCompare(b.name)
         })[0]
 
-      const path = latestDailyCSV.download_url
-      console.log(path)
-      return path
+      return latestDailyCSV.download_url
     })
 
   return csv()
@@ -268,10 +258,10 @@ function queryTimeseriesCsvAndSave (timeseries, path, category) {
     })
 }
 
-function createPropertyIfNeed (target, name, item) {
-  if (nestedProperty.has(target, name)) return
+function createTimeseriesItemPropertyIfNeed (timeseries, name, item) {
+  if (nestedProperty.has(timeseries, name)) return
 
-  target[name] = {
+  timeseries[name] = {
     [column.PROVINCE_STATE]: item['Province/State'],
     [column.COUNTRY_REGION]: item['Country/Region'],
     [column.LAST_UPDATE]: lastUpdate,
@@ -282,14 +272,16 @@ function createPropertyIfNeed (target, name, item) {
   }
 
   // Append country codes
-  const countryName = item['Country/Region']
-  const countryCode = lookup.byCountry(countryName) || lookup.byCountry(fixedCountryCodes[countryName])
+  appendCountryCode(timeseries[name], item['Country/Region'])
+}
 
-  if (countryCode) {
-    target[name].countrycode = {
-      iso2: countryCode.iso2,
-      iso3: countryCode.iso3
-    }
+function appendCountryCode (country, countryName) {
+  const countryCode = lookup.byCountry(countryName) || lookup.byCountry(fixedCountryCodes[countryName])
+  if (!countryCode) return
+
+  country.countrycode = {
+    iso2: countryCode.iso2,
+    iso3: countryCode.iso3
   }
 }
 
