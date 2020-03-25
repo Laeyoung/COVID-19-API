@@ -109,7 +109,7 @@ function updateCSVDataSet () {
 
       // Set 0 for unknown recovered value
       for (const item of Object.values(timeseries)) {
-        for (const date of Object.values(item)) {
+        for (const date of Object.values(item.timeseries)) {
           if (!date.recovered) date.recovered = 0
         }
       }
