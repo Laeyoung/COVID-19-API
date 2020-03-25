@@ -16,8 +16,8 @@ const column = {
 const request = require('request')
 const csv = require('csvtojson')
 const csvPath = {
-  confirmed: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv',
-  deaths: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv',
+  confirmed: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
+  deaths: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv',
   recovered: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 }
 
@@ -104,6 +104,13 @@ function updateCSVDataSet () {
           for (const date of keys.slice(4)) {
             nestedProperty.set(timeseries[name], `timeseries.${date}.${category}`, Number(item[date]))
           }
+        }
+      }
+
+      // Set 0 for unknown recovered value
+      for (const item of Object.values(timeseries)) {
+        for (const date of Object.values(item)) {
+          if (!date.recovered) date.recovered = 0
         }
       }
 
