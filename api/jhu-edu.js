@@ -102,7 +102,10 @@ function updateCSVDataSet () {
           // For timeseries
           createPropertyIfNeed(timeseries, name, item)
           for (const date of keys.slice(4)) {
-            nestedProperty.set(timeseries[name], `timeseries.${date}.${category}`, Number(item[date]))
+            // recovered csv file uses '3/24/2020' date format instead of '3/24/20'
+            const fixedDatePropertyName = date.replace('/2020', '/20')
+
+            nestedProperty.set(timeseries[name], `timeseries.${fixedDatePropertyName}.${category}`, Number(item[date]))
           }
         }
       }
