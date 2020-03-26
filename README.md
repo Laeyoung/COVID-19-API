@@ -8,6 +8,8 @@ API Service for tracking the COVID-19
 
 ## API Document
 
+>Recovered data from JHU CCSE will not be updated after March 23th. Check [this issue](https://github.com/Laeyoung/COVID-19-API/issues/16).
+
 ### Endpoint
 https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/
 
