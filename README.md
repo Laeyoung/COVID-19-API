@@ -198,7 +198,8 @@ curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/t
 - https://corona-three.now.sh/
 
 ### Original data source
-[Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19), provided by JHU CSSE
+- [Novel Coronavirus (COVID-19) Cases](https://github.com/CSSEGISandData/COVID-19), provided by JHU CSSE
+- [Live Corona Detector](https://github.com/LiveCoronaDetector/livecod), provided by KCDC(South Korea)
 
 ## License
 This project is released under the [MIT License](http://opensource.org/licenses/MIT). See LICENSE for details.
