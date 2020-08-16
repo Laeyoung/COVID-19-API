@@ -4,7 +4,7 @@
 API Service for tracking the COVID-19
 
 ## Try it
-[![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=github.com/Laeyoung/Wuhan-Coronavirus-API)
+[![Run on Ainize](https://ainize.ai/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=https://github.com/laeyoung/covid-19-api)
 
 ## API Document
 
