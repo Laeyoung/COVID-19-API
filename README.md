@@ -11,7 +11,7 @@ API Service for tracking the COVID-19
 >Recovered data from JHU CCSE will not be updated after March 23th. Check [this issue](https://github.com/Laeyoung/COVID-19-API/issues/16).
 
 ### Endpoint
-https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/
+https://master-covid-19-api-laeyoung.endpoint.ainize.ai/
 
 ### Brief
 
@@ -33,11 +33,11 @@ Content-Type: application/json
 
 **Curl:**
 ```sh
-curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/brief" -H "accept: application/json"
+curl -X GET "https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/brief" -H "accept: application/json"
 ```
 
 **Browser:**
-https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/brief
+https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/brief
 
 ### Latest
 
@@ -99,12 +99,12 @@ Content-Type: application/json
 
 **Curl:**
 ```sh
-curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest" -H "accept: application/json"
+curl -X GET "https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/latest" -H "accept: application/json"
 ```
 
 **Browser:**
-- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest
-- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?iso2=US&onlyCountries=true
+- https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/latest
+- https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/latest?iso2=US&onlyCountries=true
 
 
 ### Timeseries
@@ -185,12 +185,12 @@ Content-Type: application/json
 
 **Curl:**
 ```sh
-curl -X GET "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries" -H "accept: application/json"
+curl -X GET "https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/timeseries" -H "accept: application/json"
 ```
 
 **Browser:**
-- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
-- https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/timeseries?iso2=US&onlyCountries=true
+- https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/timeseries
+- https://master-covid-19-api-laeyoung.endpoint.ainize.ai/jhu-edu/timeseries?iso2=US&onlyCountries=true
 
 ### Services using COVID-19-API
 - https://corona-board.soaple.endpoint.ainize.ai/
