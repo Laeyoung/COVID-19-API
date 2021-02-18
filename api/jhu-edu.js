@@ -120,6 +120,19 @@ function updateCSVDataSet () {
       responseSet.brief = brief
       responseSet.latest = Object.values(latest)
       responseSet.timeseries = Object.values(timeseries)
+    
+      // Add 'new_confirmed' at timeseries response
+      responseSet.timeseries.forEach(({ timeseries }) => {
+        let prevConfirmed = 0;
+
+        for (const date in timeseries) {
+          const confirmed = timeseries[date].confirmed;
+          const newConfirmed = confirmed - prevConfirmed;
+          timeseries[date]['new_confirmed'] = newConfirmed >= 0 ? newConfirmed : 0;
+
+          prevConfirmed = confirmed;
+        }
+      })
 
       // Uses deep copy
       // https://stackoverflow.com/a/122704/3614334
