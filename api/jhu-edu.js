@@ -91,6 +91,8 @@ function updateCSVDataSet () {
           const keys = Object.keys(item)
           const cell = item[keys[keys.length - 1]]
           const latestCount = cell ? Number(cell) : Number(item[keys[keys.length - 2]])
+          
+          const prevCount = (cell ? Number(item[keys[keys.length - 2]]) : Number(item[keys[keys.length - 3]])) ?? 0
 
           // For brief
           brief[category] += latestCount
@@ -98,6 +100,14 @@ function updateCSVDataSet () {
           // For latest
           createPropertyIfNeed(latest, name, item)
           latest[name][category] = latestCount
+          // Add new_confirmed at latest
+          if (category === 'confirmed') {
+            const prevCount = (cell
+                ? Number(item[keys[keys.length - 2]])
+                : Number(item[keys[keys.length - 3]]))
+                ?? 0
+            latest[name]['new_confirmed'] = latestCount - prevCount >= 0 ? latestCount - prevCount : 0;
+          }
 
           // For timeseries
           createPropertyIfNeed(timeseries, name, item)
