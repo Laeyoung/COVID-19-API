@@ -100,10 +100,8 @@ function updateCSVDataSet () {
           latest[name][category] = latestCount
           // Add new_confirmed at latest
           if (category === 'confirmed') {
-            const prevCount = (cell
-                ? Number(item[keys[keys.length - 2]])
-                : Number(item[keys[keys.length - 3]]))
-                ?? 0
+            let prevCount = cell ? Number(item[keys[keys.length - 2]]) : Number(item[keys[keys.length - 3]])
+            prevCount = prevCount || 0
             latest[name]['new_confirmed'] = latestCount - prevCount >= 0 ? latestCount - prevCount : 0;
           }
 
