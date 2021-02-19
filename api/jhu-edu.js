@@ -92,8 +92,6 @@ function updateCSVDataSet () {
           const cell = item[keys[keys.length - 1]]
           const latestCount = cell ? Number(cell) : Number(item[keys[keys.length - 2]])
           
-          const prevCount = (cell ? Number(item[keys[keys.length - 2]]) : Number(item[keys[keys.length - 3]])) ?? 0
-
           // For brief
           brief[category] += latestCount
 
