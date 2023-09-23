@@ -1,10 +1,10 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 
-import fetch from "node-fetch";
-import fs from "fs";
-import path from "path";
-import schedule from "node-schedule";
+const fetch = require("node-fetch");
+const fs = require("fs");
+const path = require("path");
+const schedule = require("node-schedule");
 
 const url =
   "https://raw.githubusercontent.com/LiveCoronaDetector/livecod/master/data/koreaRegionalData.js";
@@ -48,4 +48,4 @@ const updateDataSet = async () => {
 schedule.scheduleJob("12 * * * *", updateDataSet); // Call every hour at 12 minutes
 updateDataSet();
 
-export default router;
+module.exports = router;
