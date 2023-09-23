@@ -1,48 +1,51 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const fetch = require('node-fetch')
-const fs = require('fs')
-const url = 'https://raw.githubusercontent.com/LiveCoronaDetector/livecod/master/data/koreaRegionalData.js'
-const tempFilePath = './dataset/temp-kcdc.js'
-const tempModulePath = '../dataset/temp-kcdc.js'
-const exportModule = 'module.exports = koreaRegionalData;'
+const fetch = require("node-fetch");
+const fs = require("fs");
+const path = require("path");
+const schedule = require("node-schedule");
 
-const schedule = require('node-schedule')
-schedule.scheduleJob('12 * * * *', updateDataSet) // Call every hour at 12 minutes
+const url =
+  "https://raw.githubusercontent.com/LiveCoronaDetector/livecod/master/data/koreaRegionalData.js";
+const tempFilePath = path.join(__dirname, "../dataset/temp-kcdc.js");
+const exportModule = "module.exports = koreaRegionalData;";
 
-let koreaRegionalData = {}
+let koreaRegionalData = {};
 
-router.get('/brief', function (req, res) {
-  res.status(200).json(koreaRegionalData)
-})
+router.get("/brief", (req, res) => {
+  res.status(200).json(koreaRegionalData);
+});
 
-async function updateDataSet () {
-  console.log('Korea KCDC Updated at ' + new Date().toISOString())
+const updateDataSet = async () => {
+  console.log(`Korea KCDC Updated at ${new Date().toISOString()}`);
 
   try {
-    const response = await fetch(url)
-    const body = await response.text()
+    const response = await fetch(url);
+    const body = await response.text();
 
-    fs.writeFile(tempFilePath, body + exportModule, function (err) {
+    fs.writeFile(tempFilePath, `${body}${exportModule}`, (err) => {
       if (err) {
-        console.error(err)
-      } else {
-        try {
-          koreaRegionalData = require(tempModulePath)
-          console.log('Korea KCDC data was saved!')
-        } catch (e) {
-          console.error(e)
-          koreaRegionalData = {}
-        }
+        console.error(err);
+        return;
       }
-    })
+
+      try {
+        delete require.cache[require.resolve(tempFilePath)];
+        koreaRegionalData = require(tempFilePath);
+        console.log("Korea KCDC data was saved!");
+      } catch (e) {
+        console.error(e);
+        koreaRegionalData = {};
+      }
+    });
   } catch (e) {
-    console.error(e)
-    koreaRegionalData = {}
+    console.error(e);
+    koreaRegionalData = {};
   }
-}
+};
 
-updateDataSet()
+schedule.scheduleJob("12 * * * *", updateDataSet); // Call every hour at 12 minutes
+updateDataSet();
 
-module.exports = router
+module.exports = router;
